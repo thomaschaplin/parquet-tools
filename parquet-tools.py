@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import numpy as np
 import pandas as pd
 import pyarrow as pa
@@ -12,8 +14,10 @@ def write_parquet_file(compression):
                        'two': ['foo', 'bar', 'baz'],
                        'three': [True, False, True]})
     table = pa.Table.from_pandas(df)
+    start_time = datetime.now()
     pq.write_table(table, file_name, compression=compression)
-    print('Written a parquet file')
+    write_time = datetime.now() - start_time
+    print('Written the parquet file', file_name, 'and it took:', write_time)
 
 
 def get_parquet_file_data(columns):
