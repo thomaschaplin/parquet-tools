@@ -1,0 +1,44 @@
+import numpy as np
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
+
+file_name = 'example.parquet'
+file_compression = 'gzip'  # 'snappy', 'gzip', 'brotli', 'None'
+
+
+def write_parquet_file(compression):
+    df = pd.DataFrame({'one': [-1, np.nan, 2.5],
+                       'two': ['foo', 'bar', 'baz'],
+                       'three': [True, False, True]})
+    table = pa.Table.from_pandas(df)
+    pq.write_table(table, file_name, compression=compression)
+    print('Written a parquet file')
+
+
+def get_parquet_file_data(columns):
+    table = pq.read_table(file_name)
+    table.to_pandas()
+    return pq.read_table(file_name, columns=columns).to_pandas()
+
+
+def get_parquet_file_metadata():
+    parquet_file = pq.ParquetFile(file_name)
+    return parquet_file.metadata
+
+
+def get_parquet_file_schema():
+    parquet_file = pq.ParquetFile(file_name)
+    return parquet_file.schema
+
+
+if __name__ == "__main__":
+    write_parquet_file(file_compression)
+
+    data = get_parquet_file_data(['one', 'two', 'three'])
+    metadata = get_parquet_file_metadata()
+    schema = get_parquet_file_schema()
+
+    print(data)
+    print(metadata)
+    print(schema)
