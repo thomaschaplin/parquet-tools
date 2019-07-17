@@ -1,12 +1,12 @@
 from datetime import datetime
-
 import numpy as np
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
+import uuid
 
-file_name = 'example.parquet'
-file_compression = 'gzip'  # 'snappy', 'gzip', 'brotli', 'None'
+file_compression = 'GZIP'  # 'NONE', 'SNAPPY', 'GZIP', 'LZO', 'BROTLI', 'LZ4', 'ZSTD'
+file_name = str(uuid.uuid4()) + '_' + file_compression + '.parquet'
 
 
 def write_parquet_file(compression):
